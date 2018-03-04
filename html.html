@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    #labelFile {
+      width: 40px;
+      height: 40px;
+      margin-top: 20px;
+      text-align: center;
+      border: 1px solid grey;
+      cursor: pointer;
+      display: inline-block;
+      width: 180px;
+      height: 40px;
+      line-height: 40px;
+    }
+    #labelFile:hover {
+      border: 1px solid #178ce6;
+    }
+    #drop-container {
+      background: burlywood
+    }
+  </style>
+</head>
+<body>
+  <h1 align='center'>hello world!</h1>
+  <a href="https://baidu.com" target="_blank">百度</a>
+  <p><ins>插入字</ins></p>
+  <p><del>删除字</del></p>
+  <p>测试商标<sup>o</sup>C</p>
+  <p>测试下标X<sup>1</sup></p>
+  <a href='#tips'>ceshi</a>  
+  <div style='height: 200px'></div>
+  <div id='tips'>i</div>
+  <div style='height: 200px' id='drop-container'></div>
+  <input type="file" name="test" id="fileInput" style="display: none"/>
+  <span id="sizeContainer">0</span>
+  <label for="fileInput" style="cursor: pointer" id="labelFile">select some files</label>
+  <script>
+    window.onload = function() {
+      var inputElement = document.querySelector('#fileInput');
+      var sizeContainer = document.querySelector('#sizeContainer');
+      var dropContainer = document.querySelector('#drop-container');
+      inputElement.addEventListener('change', handleFiles, false);
+      dropContainer.addEventListener('dragenter', dragenter, false);
+      dropContainer.addEventListener('dragover', dragover, false);
+      dropContainer.addEventListener('drop', drop, false);
+
+      function handleFiles(){
+        var nBytes = 0, files = this.files, nFiles = files.length;
+        for(var nFileId = 0; nFileId < nFiles; nFileId++) {
+          nBytes += files[nFileId].size;
+        }
+        sizeContainer.innerHTML = nBytes + 'bytes';
+      }
+
+      function dropFiles(files) {
+        var nBytes = 0, nFiles = files.length, urls = [];
+        for(var nFileId = 0; nFileId < nFiles; nFileId++) {
+          var file = files[nFileId];
+          nBytes += file.size;
+          var img = document.createElement("img");
+          img.style.width = '40px';
+          img.classList.add("obj");
+          img.file = file;
+          dropContainer.appendChild(img); // Assuming that "preview" is the div output where the content will be displayed.
+          
+          var reader = new FileReader();
+          reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
+          reader.readAsDataURL(file);
+          urls.push(window.URL.createObjectURL(file));
+        }
+        sizeContainer.innerHTML = nBytes + 'bytes';
+        console.log('I am dropped!');
+        console.log(urls);
+      }
+
+      function dragenter(e) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+
+      function dragover(e) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+
+      function drop(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        var dt = e.dataTransfer;
+        var files = dt.files;
+        console.log(e);
+        dropFiles(files);
+      }
+
+    }
+  </script>
+</body>
+</html>

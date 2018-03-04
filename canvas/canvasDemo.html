@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<canvas id="drawing" width="400" height="400"></canvas>
+</body>
+<script>
+    window.onload = function(){
+        var container = document.querySelector('#drawing');
+        if (container.getContext) {
+            var context = container.getContext("2d");
+            context.strokeStyle = "red";
+            context.fillStyle = "#178ce6";
+            context.fillRect(30, 30, 50, 50);
+            context.strokeRect(55, 55, 50, 50);
+            context.clearRect(60, 60, 15, 15);
+
+            context.beginPath();
+
+            context.arc(110, 110, 100, 0, 2 * Math.PI, false);
+
+            context.moveTo(206, 100);
+            context.arc(110, 110, 96, 0, 2 * Math.PI, false);
+
+            context.moveTo(110, 110);
+            context.lineTo(110, 20);
+
+            context.moveTo(110, 110);
+            context.lineTo(30, 110);
+
+            context.stroke();
+        }
+    }
+</script>
+</html>
